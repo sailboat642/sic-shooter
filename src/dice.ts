@@ -2,6 +2,7 @@
 import { 
     Scene,
     MeshBuilder,
+    Mesh,
     Color4,
     PhysicsAggregate,
     PhysicsShapeType,
@@ -12,7 +13,7 @@ import {
 
 export class Dice {
     private _scene: Scene;
-    public mesh: any;
+    public mesh!: Mesh;
 
     constructor(scene: Scene) {
         this._scene = scene;
@@ -41,9 +42,21 @@ export class Dice {
         return box;
     }
 
-    public roll() {
-        this.mesh.physicsBody.applyImpulse(new Vector3(0, 5, 0), this.mesh.getAbsolutePosition());
-        this.mesh.physicsBody.applyTorque(new Vector3(Math.random() * 10, Math.random() * 10, Math.random() * 10));
+    public roll(flashElement: HTMLElement, impulse?: Vector3, contactPoint?: Vector3) {
+        // 1. Internalized Flash Logic
+        flashElement.classList.remove('flash');
+        void flashElement.offsetWidth; // Force reflow to restart animation
+        flashElement.classList.add('flash');
+
+        // 2. Physics Logic
+        if (impulse && contactPoint) {
+            // Precise shot impact
+            this.mesh.physicsBody?.applyImpulse(impulse, contactPoint);
+        } else {
+            // Default toss if no specific shot data is provided
+            this.mesh.physicsBody?.applyImpulse(new Vector3(0, 5, 0), this.mesh.getAbsolutePosition());
+            this.mesh.physicsBody?.applyTorque(new Vector3(Math.random() * 10, Math.random() * 10, Math.random() * 10));
+        }
     }
 
     public getRollResult(): string {

@@ -26,7 +26,7 @@ export class Board {
         new PhysicsAggregate(ground, PhysicsShapeType.BOX, { mass: 0 }, this._scene);
 
         // Wall Dimensions
-        const wallHeight = 10; // Reduced height, 50 was likely overkill
+        const wallHeight = 50; 
         const wallThickness = 0.1;
 
         // 2. Invisible Wall Helper Function
